@@ -1,0 +1,83 @@
+jump @10000 ; 6 0 4
+.memory 10000 ; 1021 字节
+set2 f1 3 ; 8 80 3 0
+jump @function_end
+
+.import_func @factorial
+; .function @multiply 4
+;     ; f1 += 4
+;     .f1 4
+;     ; 局部变量
+;     .var2 s 0
+;     .var2 i 0
+;     ; 参数
+;     .var2 x
+;     .var2 y
+;
+;     @while_start
+;     .compare i x
+;     jump_if_less @while_block
+;     jump @while_end
+;     @while_block
+;         .add s y s
+;         .addz i 1
+;
+;         jump @while_start
+;     @while_end
+;     .get s ; s 的值给 a1
+;     .return 8
+;
+; ; def fac(n):
+; ;   b = 2
+; ;   e = 1
+; ;   if n < b:
+; ;       return 1
+; ;   else:
+; ;       f = fac(n - e)
+; ;       s = n * fac(n - e)
+; ;       return s
+; .function @factorial 2
+;     .f1 10
+;
+;     .var2 b 2
+;     .var2 e 1
+;     .var2 m
+;     .var2 f
+;     .var2 s
+;
+;     .var2 n
+;
+;     .compare n b
+;     jump_if_less @if
+;     jump @else
+;     @if
+;         .get e
+;         .return 12
+;     @else
+;         set2 a2 1
+;         .subtract n e m
+;         .call @factorial m
+;         .set f
+;         .call @multiply f n
+;         .return 12
+
+
+.function @main
+    ; 局部变量
+    .f1 4
+    .var2 n 3
+    ; .var2 n {fac.n}
+    .var2 s
+
+    ; x 的值给 y
+;     .assign y x
+    ; 传递参数
+    .call @factorial n
+    .set s ; a1 的值给 s
+    .get s
+    .return 4
+
+
+@function_end
+.call @main ; 调用函数
+halt ; 255

@@ -1,0 +1,22 @@
+.function @multiply 4
+    ; f1 += 4
+    .f1 4
+    ; 局部变量
+    .var2 s 0
+    .var2 i 0
+    ; 参数
+    .var2 x
+    .var2 y
+
+    @while_start
+    .compare i x
+    jump_if_less @while_block
+    jump @while_end
+    @while_block
+        .add s y s
+        .addz i 1
+
+        jump @while_start
+    @while_end
+    .get s ; s 的值给 a1
+    .return 8

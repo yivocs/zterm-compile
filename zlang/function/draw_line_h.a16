@@ -1,0 +1,26 @@
+.import_func draw_point
+
+.function @draw_line_h 8
+    ; .call @draw_line_h x y len color
+    ; 局部变量
+    .f1 2
+    .var2 steps 0
+
+    .var2 x
+    .var2 y
+    .var2 len
+    .var2 color
+
+    @draw_line_h_while_start
+    .compare steps len
+    jump_if_less @draw_line_h_while_block
+    jump @draw_line_h_while_end
+    @draw_line_h_while_block
+
+        .call @draw_point x y color
+        .addz x 1
+        .addz steps 1
+
+        jump @draw_line_h_while_start
+    @draw_line_h_while_end
+    .return 10

@@ -1,0 +1,23 @@
+jump @1024
+.memory 1024
+set2 f1 3
+jump @function_end
+
+.import_func @draw_point
+
+
+.function @main
+    ; 局部变量
+    .f1 12
+    .var2 x {position.x}
+    .var2 y {position.y}
+    .var2 color {color}
+    ; 传递参数
+    .call @draw_point x y color
+    .get x
+    .return 12
+
+@function_end
+
+.call @main
+halt

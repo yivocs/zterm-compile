@@ -1,0 +1,46 @@
+.import_func @multiply
+
+; .function @multiply 4
+;     ; f1 += 4
+;     .f1 4
+;     ; 局部变量
+;     .var2 s 0
+;     .var2 i 0
+;     ; 参数
+;     .var2 x
+;     .var2 y
+;
+;     @while_start
+;     .compare i x
+;     jump_if_less @while_block
+;     jump @while_end
+;     @while_block
+;         .add s y s
+;         .addz i 1
+;
+;         jump @while_start
+;     @while_end
+;     .get s ; s 的值给 a1
+;     .return 8
+
+
+
+.function @draw_point 6
+    ; .call @draw_point x y color
+    .f1 6
+    .var2 start 44512
+    .var2 address 0
+    .var2 row 100
+
+    .var2 x
+    .var2 y
+    .var2 color
+
+    .call @multiply y row
+    .set address
+    .add address x address
+    .add start address address
+
+    .save color address
+    .get address
+    .return 12

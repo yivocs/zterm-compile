@@ -1,0 +1,80 @@
+.import_func @draw_point
+
+.function @draw_char_column 6
+;     'z'  0b01000111  65380 = 65280 + 4 * 25
+;     0b01000111 = 71
+    ; 局部变量
+    .f1 16
+    .var2 per_char 4
+    .var2 start 65280
+    .var2 address 0
+    .var2 range 8
+    .var2 color 255
+    .var2 temp 0
+    .var2 a 0
+    .var2 i 0
+    ; cjuu
+    ; .var2 char_offset 25
+    .var2 column
+    .var2 x
+    .var2 y
+
+    .addz y 7
+;     得到 z 字体的地址,
+;     .call @multiply char_offset per_char
+;     .set address
+;     .add start address address
+;     读取一字节的值到 colomn 里
+;     .load address column
+
+    .while_less i range
+        .and column 1 temp
+        .if_less a temp
+            .call @draw_point x y color
+        .if_end
+        .addz y -1
+        .addz i 1
+        .shift column 1
+    .while_end
+
+    .get column
+
+    .return 22
+
+
+.function @draw_char 8
+;     'z'  0b01000111  65380 = 65280 + 4 * 25
+;     0b01000111 = 71
+    ; 局部变量
+    .f1 12
+    .var2 per_char 4
+    .var2 start 65280
+    .var2 address 0
+    .var2 column 0
+    .var2 temp 0
+    .var2 a 0
+    ; cjuu
+    .var2 char_offset
+    .var2 x
+    .var2 y
+    .var2 color
+
+    ; 得到 z 字体的地址,
+    .call @multiply char_offset per_char
+    .set address
+    .add start address address
+    ; 读取一字节的值到 colomn 里
+    .load address column
+    .call @draw_char_column column x y
+
+    .addz x 1
+    .addz address 1
+    .load address column
+    .call @draw_char_column column x y
+
+    .addz x 1
+    .addz address 1
+    .load address column
+    .call @draw_char_column column x y
+
+    .return 20

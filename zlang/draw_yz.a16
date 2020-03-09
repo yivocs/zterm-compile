@@ -1,0 +1,28 @@
+jump @1024
+.memory 1024
+set2 f1 3
+jump @function_end
+
+.import_func @draw_char
+
+.function @main
+    ; 局部变量
+    .f1 12
+    .var2 x 46
+    .var2 y 46
+    .var2 color 255
+    .var2 len 4
+    .var2 char 'Y'
+    .var2 column 71
+    ; 传递参数
+    .call @draw_char char x y color
+    .addz char 1
+    .addz x 4
+    .call @draw_char char x y color
+    .get x
+    .return 12
+
+@function_end
+
+.call @main
+halt

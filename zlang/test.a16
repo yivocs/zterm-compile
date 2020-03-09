@@ -1,0 +1,20 @@
+jump @1024
+.memory 1024
+set2 f1 3
+jump @function_end
+
+.import_func @multiply
+
+.function @main
+    ; 局部变量
+    .f1 12
+    .var2 x 2
+    .var2 y 3
+    .call @multiply x y
+;     .get x
+    .return 12
+
+@function_end
+
+.call @main
+halt

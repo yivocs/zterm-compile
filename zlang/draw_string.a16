@@ -1,0 +1,156 @@
+jump @1024
+.memory 1024
+set2 f1 3
+jump @function_end
+
+.import_func @multiply
+
+
+.function @draw_point 6
+    .f1 6
+    .var2 start 44512
+    .var2 address 0
+    .var2 row 100
+
+    .var2 x
+    .var2 y
+    .var2 color
+
+    .call @multiply y row
+    .set address
+    .add address x address
+    .add start address address
+
+    .save color address
+    .get address
+    .return 12
+
+.function @draw_hline 8
+    ; 局部变量
+    .f1 2
+    .var2 steps 0
+
+    .var2 x
+    .var2 y
+    .var2 len
+    .var2 color
+
+    @draw_hline_while_start
+    .compare steps len
+    jump_if_less @draw_hline_while_block
+    jump @draw_hline_while_end
+    @draw_hline_while_block
+
+        .call @draw_point x y color
+        .addz x 1
+        .addz steps 1
+
+        jump @draw_hline_while_start
+    @draw_hline_while_end
+
+    .return 10
+
+.function @draw_char_column 6
+;     'z'  0b01000111  65380 = 65280 + 4 * 25
+;     0b01000111 = 71
+    ; 局部变量
+    .f1 16
+    .var2 per_char 4
+    .var2 start 65280
+    .var2 address 0
+    .var2 range 8
+    .var2 color 255
+    .var2 temp 0
+    .var2 a 0
+    .var2 i 0
+    ; cjuu
+    ; .var2 char_offset 25
+    .var2 column
+    .var2 x
+    .var2 y
+
+    .addz y 7
+;     得到 z 字体的地址,
+;     .call @multiply char_offset per_char
+;     .set address
+;     .add start address address
+;     读取一字节的值到 colomn 里
+;     .load address column
+
+    .while_less i range
+        .and column 1 temp
+        .if_less a temp
+            .call @draw_point x y color
+        .if_end
+        .addz y -1
+        .addz i 1
+        .shift column 1
+    .while_end
+
+    .get column
+
+    .return 22
+
+.function @draw_char 6
+;     'z'  0b01000111  65380 = 65280 + 4 * 25
+;     0b01000111 = 71
+    ; 局部变量
+    .f1 14
+    .var2 per_char 4
+    .var2 start 65280
+    .var2 address 0
+    .var2 column 0
+    .var2 color 255
+    .var2 temp 0
+    .var2 a 0
+    ; cjuu
+    .var2 char_offset
+    .var2 x
+    .var2 y
+
+    ; 得到 z 字体的地址,
+    .call @multiply char_offset per_char
+    .set address
+    .add start address address
+    ; 读取一字节的值到 colomn 里
+    .load address column
+    .call @draw_char_column column x y
+
+    .addz x 1
+    .addz address 1
+    .load address column
+    .call @draw_char_column column x y
+
+    .addz x 1
+    .addz address 1
+    .load address column
+    .call @draw_char_column column x y
+
+    .return 20
+
+
+
+.function @main
+    ; 局部变量
+    .f1 12
+    .var2 x 46
+    .var2 y 46
+    .var2 color 255
+    .var2 len 4
+    .var2 char 'Y'
+    .var2 column 71
+    ; 传递参数
+;     .call @draw_point x y color
+;     .call @draw_hline x y len color
+;     .call @draw_char_column column x y
+    .call @draw_char char x y
+    .addz char 1
+    .addz x 4
+    .call @draw_char char x y
+    .get x
+    .return 12
+
+@function_end
+
+.call @main
+halt
